@@ -1,12 +1,14 @@
 package com.example.productcatalog.model;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.amqp.core.Queue;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
-@ResponseStatus(HttpStatus.NOT_FOUND)
-public class ProductNotFoundException extends RuntimeException {
+@Configuration
+public class RabbitMQConfig {
 
-    public ProductNotFoundException(Long id) {
-        super("Product not found: " + id);
+    @Bean
+    public Queue productQueue() {
+        return new Queue("product.queue", false);
     }
 }

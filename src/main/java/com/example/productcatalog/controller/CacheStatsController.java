@@ -1,9 +1,6 @@
 package com.example.productcatalog.controller;
 
-import com.github.benmanes.caffeine.cache.Cache;
-import com.github.benmanes.caffeine.cache.stats.CacheStats;
-import org.springframework.cache.CacheManager;
-import org.springframework.cache.caffeine.CaffeineCache;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -11,27 +8,23 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/cache/stats")
-public class CacheStatsController {
+@RequestMapping("/rabbitmq/stats")
+public class RabbitMqStatsController {
 
-    private final CacheManager cacheManager;
+    private final RabbitTemplate rabbitTemplate;
 
-    public CacheStatsController(CacheManager cacheManager) {
-        this.cacheManager = cacheManager;
+    public RabbitMqStatsController(RabbitTemplate rabbitTemplate) {
+        this.rabbitTemplate = rabbitTemplate;
     }
 
     @GetMapping
     public Map<String, Object> stats() {
-        CaffeineCache caffeineCache = (CaffeineCache) cacheManager.getCache("products");
-        Cache<Object, Object> nativeCache = caffeineCache.getNativeCache();
-        CacheStats stats = nativeCache.stats();
-
+        // RabbitMQ stats would typically be retrieved via management API or custom metrics
+        // This is a placeholder returning dummy values for demonstration
         return Map.of(
-            "size",       nativeCache.estimatedSize(),
-            "hits",       stats.hitCount(),
-            "misses",     stats.missCount(),
-            "hitRate",    Math.round(stats.hitRate() * 100) + "%",
-            "evictions",  stats.evictionCount()
+            "queueSize", 0,
+            "messageCount", 0,
+            "consumerCount", 0
         );
     }
 }
